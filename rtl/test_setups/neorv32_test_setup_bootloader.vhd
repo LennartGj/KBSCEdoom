@@ -76,7 +76,7 @@ begin
   );
 
   -- GPIO output --
-  gpio_o <= con_gpio_out(7 downto 0);
+  gpio_o <= con_gpio_out(15 downto 0);
 
 
 end architecture;
