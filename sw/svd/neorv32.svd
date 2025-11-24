@@ -24,17 +24,18 @@
   </cpu>
 
   <!-- defaults for all peripherals -->
-  <addressUnitBits>8</addressUnitBits>
+  <addressUnitBits>16</addressUnitBits>
   <width>32</width>
   <size>32</size>
   <access>read-write</access>
   <resetValue>0x00000000</resetValue>
-  <resetMask>0x00000000</resetMask> <!-- default IO devices do not have a dedicated reset -->
+  <resetMask>0xffffffff</resetMask>
 
   <!-- Peripherals -->
   <peripherals>
 
-    <!-- CFS -->
+    <!-- **************************************************************** -->
+    <!-- CFS                                                              -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>CFS</name>
@@ -117,7 +118,8 @@
       </registers>
     </peripheral>
 
-    <!-- SDI -->
+    <!-- **************************************************************** -->
+    <!-- SDI                                                              -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>SDI</name>
@@ -214,7 +216,8 @@
       </registers>
     </peripheral>
 
-    <!-- SLINK -->
+    <!-- **************************************************************** -->
+    <!-- SLINK                                                            -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>SLINK</name>
@@ -330,7 +333,8 @@
       </registers>
     </peripheral>
 
-    <!-- DMA -->
+    <!-- **************************************************************** -->
+    <!-- DMA                                                              -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>DMA</name>
@@ -415,7 +419,8 @@
       </registers>
     </peripheral>
 
-    <!-- PWM -->
+    <!-- **************************************************************** -->
+    <!-- PWM                                                              -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>PWM</name>
@@ -424,7 +429,7 @@
 
       <addressBlock>
         <offset>0</offset>
-        <size>0x80</size>
+        <size>0x100</size>
         <usage>registers</usage>
       </addressBlock>
 
@@ -444,102 +449,34 @@
           <description>Clock prescaler select</description>
           <addressOffset>0x08</addressOffset>
         </register>
-        <register>
-          <name>CHANNEL[0]</name>
-          <description>Channel 0 configuration register</description>
-          <addressOffset>0x40</addressOffset>
-          <fields>
-            <field>
-              <name>CMP</name>
-              <bitRange>[15:0]</bitRange>
-              <description>Channel compare value</description>
-            </field>
-            <field>
-              <name>TOP</name>
-              <bitRange>[31:16]</bitRange>
-              <description>Channel top/wrap value</description>
-            </field>
-          </fields>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[1]</name>
-          <description>Channel 1 configuration register</description>
-          <addressOffset>0x44</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[2]</name>
-          <description>Channel 2 configuration register</description>
-          <addressOffset>0x48</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[3]</name>
-          <description>Channel 3 configuration register</description>
-          <addressOffset>0x4C</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[4]</name>
-          <description>Channel 4 configuration register</description>
-          <addressOffset>0x50</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[5]</name>
-          <description>Channel 5 configuration register</description>
-          <addressOffset>0x54</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[6]</name>
-          <description>Channel 6 configuration register</description>
-          <addressOffset>0x58</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[7]</name>
-          <description>Channel 7 configuration register</description>
-          <addressOffset>0x5C</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[8]</name>
-          <description>Channel 8 configuration register</description>
-          <addressOffset>0x60</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[9]</name>
-          <description>Channel 9 configuration register</description>
-          <addressOffset>0x64</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[10]</name>
-          <description>Channel 10 configuration register</description>
-          <addressOffset>0x68</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[11]</name>
-          <description>Channel 11 configuration register</description>
-          <addressOffset>0x6C</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[12]</name>
-          <description>Channel 12 configuration register</description>
-          <addressOffset>0x70</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[13]</name>
-          <description>Channel 13 configuration register</description>
-          <addressOffset>0x74</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[14]</name>
-          <description>Channel 14 configuration register</description>
-          <addressOffset>0x78</addressOffset>
-        </register>
-        <register derivedFrom="CHANNEL[0]">
-          <name>CHANNEL[15]</name>
-          <description>Channel 15 configuration register</description>
-          <addressOffset>0x7C</addressOffset>
-        </register>
+        <cluster>
+          <dim>32</dim>
+          <dimIncrement>0x04</dimIncrement>
+          <addressOffset>0x80</addressOffset>
+          <name>CHANNEL[%s]</name>
+          <description>Channel configuration register</description>
+          <register>
+            <name>TOPCMP</name>
+            <addressOffset>0x0</addressOffset>
+            <fields>
+              <field>
+                <name>CMP</name>
+                <bitRange>[15:0]</bitRange>
+                <description>Channel counter compare value</description>
+              </field>
+              <field>
+                <name>TOP</name>
+                <bitRange>[31:16]</bitRange>
+                <description>Channel counter top/wrap value</description>
+              </field>
+            </fields>
+          </register>
+        </cluster>
       </registers>
     </peripheral>
 
-    <!-- GPTMR -->
+    <!-- **************************************************************** -->
+    <!-- GPTMR                                                            -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>GPTMR</name>
@@ -550,55 +487,67 @@
 
       <addressBlock>
         <offset>0</offset>
-        <size>0x10</size>
+        <size>0x100</size>
         <usage>registers</usage>
       </addressBlock>
 
       <registers>
         <register>
-          <name>CTRL</name>
-          <description>Control register</description>
+          <name>CSR0</name>
+          <description>Control and status register 0</description>
           <addressOffset>0x00</addressOffset>
           <fields>
             <field>
-              <name>GPTMR_CTRL_EN</name>
-              <bitRange>[0:0]</bitRange>
-              <description>Timer enable flag</description>
+              <name>ENABLE</name>
+              <bitRange>[15:0]</bitRange>
+              <description>Per-slice enable bit</description>
             </field>
             <field>
-              <name>GPTMR_CTRL_PRSC</name>
-              <bitRange>[3:1]</bitRange>
-              <description>Clock prescaler select</description>
-            </field>
-            <field>
-              <name>GPTMR_CTRL_IRQ_CLR</name>
-              <bitRange>[30:30]</bitRange>
-              <access>write-only</access>
-              <description>Set to clear timer-match interrupt</description>
-            </field>
-            <field>
-              <name>GPTMR_CTRL_IRQ_PND</name>
-              <bitRange>[31:31]</bitRange>
-              <access>read-only</access>
-              <description>Timer-match interrupt pending</description>
+              <name>MODE</name>
+              <bitRange>[31:16]</bitRange>
+              <description>Per-slice mode bit (0 = single-shot mode, 1 = continuous mode)</description>
             </field>
           </fields>
         </register>
         <register>
-          <name>THRES</name>
-          <description>Threshold register</description>
+          <name>CSR1</name>
+          <description>Control and status register 1</description>
           <addressOffset>0x04</addressOffset>
+          <fields>
+            <field>
+              <name>IRQ</name>
+              <bitRange>[15:0]</bitRange>
+              <description>Per-slice interrupt-pending bit; write 0 to clear</description>
+            </field>
+            <field>
+              <name>PRSC</name>
+              <bitRange>[18:16]</bitRange>
+              <description>Global clock prescaler select</description>
+            </field>
+          </fields>
         </register>
-        <register>
-          <name>COUNT</name>
-          <description>Counter register</description>
-          <addressOffset>0x08</addressOffset>
-          <access>read-only</access>
-        </register>
+        <cluster>
+          <dim>16</dim>
+          <dimIncrement>0x08</dimIncrement>
+          <addressOffset>0x80</addressOffset>
+          <name>SLICE[%s]</name>
+          <description>Timer slice</description>
+          <register>
+            <name>CNT</name>
+            <description>Counter register</description>
+            <addressOffset>0x00</addressOffset>
+          </register>
+          <register>
+            <name>THR</name>
+            <description>Threshold register</description>
+            <addressOffset>0x04</addressOffset>
+          </register>
+        </cluster>
       </registers>
     </peripheral>
 
-    <!-- ONEWIRE -->
+    <!-- **************************************************************** -->
+    <!-- ONEWIRE                                                          -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>ONEWIRE</name>
@@ -700,7 +649,8 @@
       </registers>
     </peripheral>
 
-    <!-- CLINT -->
+    <!-- **************************************************************** -->
+    <!-- CLINT                                                            -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>CLINT</name>
@@ -742,7 +692,8 @@
       </registers>
     </peripheral>
 
-    <!-- UART0 -->
+    <!-- **************************************************************** -->
+    <!-- UART0                                                            -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>UART0</name>
@@ -855,7 +806,8 @@
       </registers>
     </peripheral>
 
-    <!-- UART1 -->
+    <!-- **************************************************************** -->
+    <!-- UART1                                                            -->
     <!-- **************************************************************** -->
     <peripheral derivedFrom="UART0">
       <name>UART1</name>
@@ -871,7 +823,8 @@
       </addressBlock>
     </peripheral>
 
-    <!-- SPI -->
+    <!-- **************************************************************** -->
+    <!-- SPI                                                              -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>SPI</name>
@@ -977,7 +930,8 @@
       </registers>
     </peripheral>
 
-    <!-- TWI -->
+    <!-- **************************************************************** -->
+    <!-- TWI                                                              -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>TWI</name>
@@ -1082,7 +1036,8 @@
       </registers>
     </peripheral>
 
-    <!-- TWD -->
+    <!-- **************************************************************** -->
+    <!-- TWD                                                              -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>TWD</name>
@@ -1217,7 +1172,8 @@
       </registers>
     </peripheral>
 
-    <!-- TRNG -->
+    <!-- **************************************************************** -->
+    <!-- TRNG                                                             -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>TRNG</name>
@@ -1287,7 +1243,8 @@
       </registers>
     </peripheral>
 
-    <!-- WDT -->
+    <!-- **************************************************************** -->
+    <!-- WDT                                                              -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>WDT</name>
@@ -1345,7 +1302,8 @@
       </registers>
     </peripheral>
 
-    <!-- GPIO -->
+    <!-- **************************************************************** -->
+    <!-- GPIO                                                             -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>GPIO</name>
@@ -1395,7 +1353,8 @@
       </registers>
     </peripheral>
 
-    <!-- NEOLED -->
+    <!-- **************************************************************** -->
+    <!-- NEOLED                                                           -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>NEOLED</name>
@@ -1488,7 +1447,8 @@
       </registers>
     </peripheral>
 
-    <!-- TRACER -->
+    <!-- **************************************************************** -->
+    <!-- TRACER                                                           -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>TRACER</name>
@@ -1578,7 +1538,8 @@
       </registers>
     </peripheral>
 
-    <!-- SYSINFO -->
+    <!-- **************************************************************** -->
+    <!-- SYSINFO                                                          -->
     <!-- **************************************************************** -->
     <peripheral>
       <name>SYSINFO</name>

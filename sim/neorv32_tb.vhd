@@ -41,6 +41,7 @@ entity neorv32_tb is
     RISCV_ISA_Zicntr    : boolean                        := true;        -- base counters
     RISCV_ISA_Zicond    : boolean                        := true;        -- integer conditional operations
     RISCV_ISA_Zihpm     : boolean                        := true;        -- hardware performance monitors
+    RISCV_ISA_Zimop    : boolean                         := true;        -- may-be-operations
     RISCV_ISA_Zknd      : boolean                        := true;        -- cryptography NIST AES decryption extension
     RISCV_ISA_Zkne      : boolean                        := true;        -- cryptography NIST AES encryption extension
     RISCV_ISA_Zknh      : boolean                        := true;        -- cryptography NIST hash extension
@@ -156,6 +157,7 @@ begin
     RISCV_ISA_Zicntr    => RISCV_ISA_Zicntr,
     RISCV_ISA_Zicond    => RISCV_ISA_Zicond,
     RISCV_ISA_Zihpm     => RISCV_ISA_Zihpm,
+    RISCV_ISA_Zimop     => RISCV_ISA_Zimop,
     RISCV_ISA_Zknd      => RISCV_ISA_Zknd,
     RISCV_ISA_Zkne      => RISCV_ISA_Zkne,
     RISCV_ISA_Zknh      => RISCV_ISA_Zknh,
@@ -213,14 +215,14 @@ begin
     IO_TWD_EN           => true,
     IO_TWD_RX_FIFO      => 4,
     IO_TWD_TX_FIFO      => 4,
-    IO_PWM_NUM_CH       => 8,
+    IO_PWM_NUM          => 8,
     IO_WDT_EN           => true,
     IO_TRNG_EN          => true,
     IO_TRNG_FIFO        => 4,
     IO_CFS_EN           => true,
     IO_NEOLED_EN        => true,
     IO_NEOLED_TX_FIFO   => 8,
-    IO_GPTMR_EN         => true,
+    IO_GPTMR_NUM        => 4,
     IO_ONEWIRE_EN       => true,
     IO_ONEWIRE_FIFO     => 8,
     IO_DMA_EN           => true,
