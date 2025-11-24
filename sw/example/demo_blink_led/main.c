@@ -10,7 +10,7 @@
 /**********************************************************************//**
  * @file demo_blink_led/main.c
  * @author Stephan Nolting
- * @brief Minimal blinking LED demo program using the lowest 8 bits of the GPIO.output port.
+ * @brief Minimal blinking LED demo program using the 16 bits of the GPIO.output port.
  **************************************************************************/
 #include <neorv32.h>
 
@@ -26,7 +26,7 @@ void delay_ms(uint32_t time_ms) {
 
 
 /**********************************************************************//**
- * Main function; shows an incrementing 8-bit counter on GPIO.output(7:0).
+ * Main function; shows an incrementing 16-bit counter on GPIO.output(7:0).
  *
  * @note This program requires the GPIO controller to be synthesized.
  *
@@ -40,8 +40,8 @@ int main() {
   int cnt = 0;
 
   while (1) {
-    neorv32_gpio_port_set(cnt++ & 0xFF); // increment counter and mask for lowest 8 bit
-    delay_ms(250); // wait 250ms using busy wait
+    neorv32_gpio_port_set(cnt++ & 0xFFFF); // increment counter and mask for 16 bit
+    delay_ms(25); // wait 250ms using busy wait
   }
 
   // this should never be reached

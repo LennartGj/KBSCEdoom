@@ -74,6 +74,7 @@ int main(void) {
   neorv32_gpio_irq_setup(0, GPIO_TRIG_EDGE_RISING);  // input pin 0: interrupt on a rising edge
   neorv32_gpio_irq_setup(1, GPIO_TRIG_EDGE_FALLING); // input pin 1: interrupt on a falling edge
   neorv32_gpio_irq_setup(2, GPIO_TRIG_LEVEL_HIGH);   // input pin 2: interrupt on high-level
+  neorv32_gpio_irq_setup(m18, GPIO_TRIG_EDGE_RISING);
 //neorv32_gpio_irq_setup(3, GPIO_TRIG_LEVEL_LOW);    // input pin 3: interrupt on low-level
 
   // enable GPIO input pin interrupts; argument is an "enable bit mask" - one bit for each input pin

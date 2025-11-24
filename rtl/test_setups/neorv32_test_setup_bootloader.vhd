@@ -27,7 +27,8 @@ entity neorv32_test_setup_bootloader is
     clk_i       : in  std_ulogic; -- global clock, rising edge
     rstn_i      : in  std_ulogic; -- global reset, low-active, async
     -- GPIO --
-    gpio_o      : out std_ulogic_vector(7 downto 0); -- parallel output
+    gpio_o      : out std_ulogic_vector(15 downto 0); -- parallel output
+    gpio_i      : in  std_ulogic_vector(15 downto 0);
     -- UART0 --
     uart0_txd_o : out std_ulogic; -- UART0 send data
     uart0_rxd_i : in  std_ulogic  -- UART0 receive data
