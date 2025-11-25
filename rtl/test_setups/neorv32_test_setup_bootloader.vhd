@@ -28,7 +28,8 @@ entity neorv32_test_setup_bootloader is
     rstn_i      : in  std_ulogic; -- global reset, low-active, async
     -- GPIO --
     gpio_o      : out std_ulogic_vector(15 downto 0); -- parallel output
-    gpio_i      : in  std_ulogic_vector(7 downto 0);
+    gpio_i      : in  std_ulogic_vector(4 downto 0);
+    gpio_i_sw   : in  std_ulogic_vector(15 downto 0);
     -- UART0 --
     uart0_txd_o : out std_ulogic; -- UART0 send data
     uart0_rxd_i : in  std_ulogic  -- UART0 receive data
@@ -38,6 +39,7 @@ end entity;
 architecture neorv32_test_setup_bootloader_rtl of neorv32_test_setup_bootloader is
 
   signal con_gpio_out : std_ulogic_vector(31 downto 0);
+  signal con_gpio_in : std_ulogic_vector(31 downto 0);
 
 begin
 
@@ -70,13 +72,16 @@ begin
     rstn_i      => rstn_i,       -- global reset, low-active, async
     -- GPIO (available if IO_GPIO_NUM > 0) --
     gpio_o      => con_gpio_out, -- parallel output
+    gpio_i      => con_gpio_in,
     -- primary UART0 (available if IO_UART0_EN = true) --
     uart0_txd_o => uart0_txd_o,  -- UART0 send data
     uart0_rxd_i => uart0_rxd_i   -- UART0 receive data
   );
 
   -- GPIO output --
-  gpio_o <= con_gpio_out(7 downto 0);
-
+  gpio_o <= con_gpio_out(15 downto 0);
+  con_gpio_in(15 downto 0) <= gpio_i_sw(15 downto 0);
+  con_gpio_in(20 downto 16) <= gpio_i(4 downto 0);
+  
 
 end architecture;

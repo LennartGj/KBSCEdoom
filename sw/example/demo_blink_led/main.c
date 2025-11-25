@@ -24,6 +24,7 @@ void delay_ms(uint32_t time_ms) {
   neorv32_aux_delay_ms(neorv32_sysinfo_get_clk(), time_ms);
 }
 
+#define BAUD_RATE 19200
 
 /**********************************************************************//**
  * Main function; shows an incrementing 16-bit counter on GPIO.output(7:0).
@@ -36,13 +37,26 @@ int main() {
 
   // clear GPIO output (set all bits to 0)
   neorv32_gpio_port_set(0);
+  neorv32_rte_setup();
+  neorv32_uart0_setup(BAUD_RATE, 0);
+
 
   int cnt = 0;
+  
+  while(1){
+    neorv32_uart0_printf("input = %u\n", neorv32_gpio_pin_get(0));
+    if (neorv32_gpio_pin_get(0)) {
+      neorv32_gpio_port_set(cnt++ & 0xFFFF); // increment counter and mask for 16 bit
+      delay_ms(25); // wait 25ms using busy wait
+    }
+    else if (neorv32_gpio_pin_get(1)) {
+      neorv32_gpio_port_set(cnt-- & 0xFFFF); // increment counter and mask for 16 bit
+      delay_ms(25); // wait 25ms using busy wait
+    }
 
-  while (1) {
-    neorv32_gpio_port_set(cnt++ & 0xFFFF); // increment counter and mask for 16 bit
-    delay_ms(25); // wait 250ms using busy wait
+    delay_ms(25); // wait 25ms using busy wait
   }
+
 
   // this should never be reached
   return 0;
