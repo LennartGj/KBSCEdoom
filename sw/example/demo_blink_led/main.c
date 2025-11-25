@@ -44,12 +44,12 @@ int main() {
   int cnt = 0;
   
   while(1){
-    neorv32_uart0_printf("input = %u\n", neorv32_gpio_pin_get(0));
-    if (neorv32_gpio_pin_get(0)) {
+    neorv32_uart0_printf("input = %u,%u\n", neorv32_gpio_pin_get(16),neorv32_gpio_pin_get(17));
+    if (neorv32_gpio_pin_get(16)) {
       neorv32_gpio_port_set(cnt++ & 0xFFFF); // increment counter and mask for 16 bit
       delay_ms(25); // wait 25ms using busy wait
     }
-    else if (neorv32_gpio_pin_get(1)) {
+    else if (neorv32_gpio_pin_get(17)) {
       neorv32_gpio_port_set(cnt-- & 0xFFFF); // increment counter and mask for 16 bit
       delay_ms(25); // wait 25ms using busy wait
     }

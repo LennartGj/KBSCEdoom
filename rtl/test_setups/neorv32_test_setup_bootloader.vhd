@@ -62,7 +62,7 @@ begin
     DMEM_EN          => true,              -- implement processor-internal data memory
     DMEM_SIZE        => DMEM_SIZE, -- size of processor-internal data memory in bytes
     -- Processor peripherals --
-    IO_GPIO_NUM      => 8,                 -- number of GPIO input/output pairs (0..32)
+    IO_GPIO_NUM      => 32,                 -- number of GPIO input/output pairs (0..32)
     IO_CLINT_EN      => true,              -- implement core local interruptor (CLINT)?
     IO_UART0_EN      => true               -- implement primary universal asynchronous receiver/transmitter (UART0)?
   )
@@ -82,6 +82,5 @@ begin
   gpio_o <= con_gpio_out(15 downto 0);
   con_gpio_in(15 downto 0) <= gpio_i_sw(15 downto 0);
   con_gpio_in(20 downto 16) <= gpio_i(4 downto 0);
-  
 
 end architecture;
