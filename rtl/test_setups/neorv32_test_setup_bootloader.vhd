@@ -32,7 +32,13 @@ entity neorv32_test_setup_bootloader is
     gpio_i_sw   : in  std_ulogic_vector(15 downto 0);
     -- UART0 --
     uart0_txd_o : out std_ulogic; -- UART0 send data
-    uart0_rxd_i : in  std_ulogic  -- UART0 receive data
+    uart0_rxd_i : in  std_ulogic;  -- UART0 receive data
+       -- NEW VGA PORTS --
+    vga_hs_o    : out std_logic;
+    vga_vs_o    : out std_logic;
+    vga_r_o     : out std_logic_vector(3 downto 0);
+    vga_g_o     : out std_logic_vector(3 downto 0);
+    vga_b_o     : out std_logic_vector(3 downto 0)
   );
 end entity;
 
@@ -40,6 +46,27 @@ architecture neorv32_test_setup_bootloader_rtl of neorv32_test_setup_bootloader 
 
   signal con_gpio_out : std_ulogic_vector(31 downto 0);
   signal con_gpio_in : std_ulogic_vector(31 downto 0);
+  
+   -- Signal types conversion for VGA component
+  signal vga_red_int   : std_logic_vector(3 downto 0);
+  signal vga_green_int : std_logic_vector(3 downto 0);
+  signal vga_blue_int  : std_logic_vector(3 downto 0);
+
+-- Component Declaration
+  component vga_controller is
+    port (
+        clk_i     : in  std_logic;
+        rst_n_i   : in  std_logic;
+        red_i     : in  std_logic_vector(3 downto 0);
+        green_i   : in  std_logic_vector(3 downto 0);
+        blue_i    : in  std_logic_vector(3 downto 0);
+        vga_hs_o  : out std_logic;
+        vga_vs_o  : out std_logic;
+        vga_r_o   : out std_logic_vector(3 downto 0);
+        vga_g_o   : out std_logic_vector(3 downto 0);
+        vga_b_o   : out std_logic_vector(3 downto 0)
+    );
+  end component;  
 
 begin
 
@@ -82,5 +109,27 @@ begin
   gpio_o <= con_gpio_out(15 downto 0);
   con_gpio_in(15 downto 0) <= gpio_i_sw(15 downto 0);
   con_gpio_in(20 downto 16) <= gpio_i(4 downto 0);
+  
+    -- Map NEORV32 GPIO to VGA Colors
+  -- GPIO [3:0] -> Red
+  -- GPIO [7:4] -> Green
+  -- GPIO [11:8] -> Blue
+  vga_red_int   <= std_logic_vector(con_gpio_out(3 downto 0));
+  vga_green_int <= std_logic_vector(con_gpio_out(7 downto 4));
+  vga_blue_int  <= std_logic_vector(con_gpio_out(11 downto 8));
 
+  -- Instantiate VGA Controller
+  inst_vga: vga_controller 
+  port map (
+      clk_i     => std_logic(clk_i),
+      rst_n_i   => std_logic(rstn_i),
+      red_i     => vga_red_int,
+      green_i   => vga_green_int,
+      blue_i    => vga_blue_int,
+      vga_hs_o  => vga_hs_o,
+      vga_vs_o  => vga_vs_o,
+      vga_r_o   => vga_r_o,
+      vga_g_o   => vga_g_o,
+      vga_b_o   => vga_b_o
+  );
 end architecture;
