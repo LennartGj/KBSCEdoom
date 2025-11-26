@@ -6,58 +6,55 @@
 // SPDX-License-Identifier: BSD-3-Clause                                            //
 // ================================================================================ //
 
-
-/**********************************************************************//**
- * @file demo_blink_led/main.c
- * @author Stephan Nolting
- * @brief Minimal blinking LED demo program using the 16 bits of the GPIO.output port.
- **************************************************************************/
+/**********************************************************************/ /**
+                                                                          * @file demo_blink_led/main.c
+                                                                          * @author Stephan Nolting
+                                                                          * @brief Minimal blinking LED demo program using the 16 bits of the GPIO.output port.
+                                                                          **************************************************************************/
 #include <neorv32.h>
 
-
-/**********************************************************************//**
- * Simple bus-wait helper.
- *
- * @param[in] time_ms Time in ms to wait (unsigned 32-bit).
- **************************************************************************/
+/**********************************************************************/ /**
+                                                                          * Simple bus-wait helper.
+                                                                          *
+                                                                          * @param[in] time_ms Time in ms to wait (unsigned 32-bit).
+                                                                          **************************************************************************/
 void delay_ms(uint32_t time_ms) {
-  neorv32_aux_delay_ms(neorv32_sysinfo_get_clk(), time_ms);
+    neorv32_aux_delay_ms(neorv32_sysinfo_get_clk(), time_ms);
 }
 
 #define BAUD_RATE 19200
 
-/**********************************************************************//**
- * Main function; shows an incrementing 16-bit counter on GPIO.output(7:0).
- *
- * @note This program requires the GPIO controller to be synthesized.
- *
- * @return Will never return.
- **************************************************************************/
+/**********************************************************************/ /**
+                                                                          * Main function; shows an incrementing 16-bit counter on GPIO.output(7:0).
+                                                                          *
+                                                                          * @note This program requires the GPIO controller to be synthesized.
+                                                                          *
+                                                                          * @return Will never return.
+                                                                          **************************************************************************/
 int main() {
+    // clear GPIO output (set all bits to 0)
+    neorv32_gpio_port_set(0);
+    neorv32_rte_setup();
+    neorv32_uart0_setup(BAUD_RATE, 0);
 
-  // clear GPIO output (set all bits to 0)
-  neorv32_gpio_port_set(0);
-  neorv32_rte_setup();
-  neorv32_uart0_setup(BAUD_RATE, 0);
-
-
-  int cnt = 0;
-  
-  while(1){
-    neorv32_uart0_printf("input = %u,%u\n", neorv32_gpio_pin_get(16),neorv32_gpio_pin_get(17));
-    if (neorv32_gpio_pin_get(16)) {
-      neorv32_gpio_port_set(cnt++ & 0xFFFF); // increment counter and mask for 16 bit
-      delay_ms(25); // wait 25ms using busy wait
-    }
-    else if (neorv32_gpio_pin_get(17)) {
-      neorv32_gpio_port_set(cnt-- & 0xFFFF); // increment counter and mask for 16 bit
-      delay_ms(25); // wait 25ms using busy wait
+    // Check if GPIO unit is implemented
+    if (neorv32_gpio_available() == 0) {
+        return 1;  // Error: No GPIO unit synthesized!
     }
 
-    delay_ms(25); // wait 25ms using busy wait
-  }
+    while (1) {
+        neorv32_uart0_printf("input = %u,%u\n", neorv32_gpio_pin_get(16), neorv32_gpio_pin_get(17));
+        if (neorv32_gpio_pin_get(16)) {
+            neorv32_gpio_port_set(0x00F);  // increment counter and mask for 16 bit
+        } else if (neorv32_gpio_pin_get(17)) {
+            neorv32_gpio_port_set(0x0F0);
+        } else if (neorv32_gpio_pin_get(20)) {
+            neorv32_gpio_port_set(0xF00);
+        }
 
+        delay_ms(25);  // wait 25ms using busy wait
+    }
 
-  // this should never be reached
-  return 0;
+    // this should never be reached
+    return 0;
 }
