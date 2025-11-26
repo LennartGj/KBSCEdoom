@@ -1,6 +1,6 @@
 ## This file is a general .xdc for the Nexys A7 and Nexys 4 DDR
 ## For default neorv32_test_setup.vhd top entity
-
+## nee jou moeder
 ## Clock signal
 set_property -dict { PACKAGE_PIN E3   IOSTANDARD LVCMOS33 } [get_ports { clk_i }]; 	   #IO_L12P_T1_MRCC_35 	  Sch=gclk[100]
 create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { clk_i }];
