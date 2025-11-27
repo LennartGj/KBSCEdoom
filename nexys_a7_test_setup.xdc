@@ -1,11 +1,10 @@
 ## This file is a general .xdc for the Nexys A7 and Nexys 4 DDR
 ## For default neorv32_test_setup.vhd top entity
-## nee jou moeder
 ## Clock signal
 set_property -dict { PACKAGE_PIN E3   IOSTANDARD LVCMOS33 } [get_ports { clk_i }]; 	   #IO_L12P_T1_MRCC_35 	  Sch=gclk[100]
 create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { clk_i }];
 
-##Switches
+## GPIO INPUTS (switches)
 set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { gpio_i_sw[0] }]; #IO_L24N_T3_RS0_15 Sch=sw[0]
 set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 } [get_ports { gpio_i_sw[1]}]; #IO_L3N_T0_DQS_EMCCLK_14 Sch=sw[1]
 set_property -dict { PACKAGE_PIN M13   IOSTANDARD LVCMOS33 } [get_ports { gpio_i_sw[2] }]; #IO_L6N_T0_D08_VREF_14 Sch=sw[2]
@@ -23,8 +22,7 @@ set_property -dict { PACKAGE_PIN U12   IOSTANDARD LVCMOS33 } [get_ports { gpio_i
 set_property -dict { PACKAGE_PIN U11   IOSTANDARD LVCMOS33 } [get_ports { gpio_i_sw[14] }]; #IO_L19N_T3_A09_D25_VREF_14 Sch=sw[14]
 set_property -dict { PACKAGE_PIN V10   IOSTANDARD LVCMOS33 } [get_ports { gpio_i_sw[15] }]; #IO_L21P_T3_DQS_14 Sch=sw[15]
 
-## GPIO INPUTS (via switches)
-## GPIO INPUTS (via switches)
+## GPIO INPUTS (buttons)
 set_property -dict { PACKAGE_PIN P17  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i[0] }]; # BTNL GPIO_16
 set_property -dict { PACKAGE_PIN M17  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i[1] }]; # BTNR GPIO_17
 set_property -dict { PACKAGE_PIN M18  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i[2] }]; # BNTU GPIO_18

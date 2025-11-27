@@ -7,7 +7,6 @@
 -- Licensed under the BSD-3-Clause license, see LICENSE for details.                --
 -- SPDX-License-Identifier: BSD-3-Clause                                            --
 -- ================================================================================ --
---Dit si een testi voor de Sennaiiiii
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
