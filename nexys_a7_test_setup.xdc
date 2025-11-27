@@ -23,11 +23,11 @@ set_property -dict { PACKAGE_PIN U11   IOSTANDARD LVCMOS33 } [get_ports { gpio_i
 set_property -dict { PACKAGE_PIN V10   IOSTANDARD LVCMOS33 } [get_ports { gpio_i_sw[15] }]; #IO_L21P_T3_DQS_14 Sch=sw[15]
 
 ## GPIO INPUTS (buttons)
-set_property -dict { PACKAGE_PIN P17  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i[0] }]; # BTNL GPIO_16
-set_property -dict { PACKAGE_PIN M17  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i[1] }]; # BTNR GPIO_17
-set_property -dict { PACKAGE_PIN M18  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i[2] }]; # BNTU GPIO_18
-set_property -dict { PACKAGE_PIN P18  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i[3] }]; # BTND GPIO_19
-set_property -dict { PACKAGE_PIN N17  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i[4] }]; # BTNC GPIO_20
+set_property -dict { PACKAGE_PIN P17  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i_bt[0] }]; # BTNL GPIO_16
+set_property -dict { PACKAGE_PIN M17  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i_bt[1] }]; # BTNR GPIO_17
+set_property -dict { PACKAGE_PIN M18  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i_bt[2] }]; # BNTU GPIO_18
+set_property -dict { PACKAGE_PIN P18  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i_bt[3] }]; # BTND GPIO_19
+set_property -dict { PACKAGE_PIN N17  IOSTANDARD LVCMOS33 PULLDOWN true } [get_ports { gpio_i_bt[4] }]; # BTNC GPIO_20
 
 ## LEDs
 set_property -dict { PACKAGE_PIN H17  IOSTANDARD LVCMOS33 } [get_ports { gpio_o[0] }]; #IO_L18P_T2_A24_15 	  Sch=led[0]

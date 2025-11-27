@@ -27,7 +27,7 @@ entity neorv32_test_setup_bootloader is
     rstn_i      : in  std_ulogic; -- global reset, low-active, async
     -- GPIO --
     gpio_o      : out std_ulogic_vector(15 downto 0); -- parallel output
-    gpio_i      : in  std_ulogic_vector(4 downto 0);
+    gpio_i_bt      : in  std_ulogic_vector(4 downto 0);
     gpio_i_sw   : in  std_ulogic_vector(15 downto 0);
     -- UART0 --
     uart0_txd_o : out std_ulogic; -- UART0 send data
@@ -80,6 +80,6 @@ begin
   -- GPIO output --
   gpio_o <= con_gpio_out(15 downto 0);
   con_gpio_in(15 downto 0) <= gpio_i_sw(15 downto 0);
-  con_gpio_in(20 downto 16) <= gpio_i(4 downto 0);
+  con_gpio_in(20 downto 16) <= gpio_i_bt(4 downto 0);
 
 end architecture;
