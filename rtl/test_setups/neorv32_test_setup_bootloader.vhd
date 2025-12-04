@@ -118,7 +118,7 @@ begin
       vga_g_o   => vga_g_o,
       vga_b_o   => vga_b_o
     );
-
+  -- Deze staat los in de git voeg hem handmatig toe!!! samen met de debouncer!!
   -- PS/2 receiver
   inst_ps2: PS2Receiver
     port map (
