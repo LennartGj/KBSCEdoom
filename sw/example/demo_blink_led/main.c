@@ -1,60 +1,35 @@
 // ================================================================================ //
-// The NEORV32 RISC-V Processor - https://github.com/stnolting/neorv32              //
-// Copyright (c) NEORV32 contributors.                                              //
-// Copyright (c) 2020 - 2025 Stephan Nolting. All rights reserved.                  //
-// Licensed under the BSD-3-Clause license, see LICENSE for details.                //
-// SPDX-License-Identifier: BSD-3-Clause                                            //
+// NEORV32 PS/2 Keyboard Reader Demo
+// Reads 16-bit keycode from GPIO and prints via UART0
 // ================================================================================ //
 
-/**********************************************************************/ /**
-                                                                          * @file demo_blink_led/main.c
-                                                                          * @author Stephan Nolting
-                                                                          * @brief Minimal blinking LED demo program using the 16 bits of the GPIO.output port.
-                                                                          **************************************************************************/
 #include <neorv32.h>
 
-/**********************************************************************/ /**
-                                                                          * Simple bus-wait helper.
-                                                                          *
-                                                                          * @param[in] time_ms Time in ms to wait (unsigned 32-bit).
-                                                                          **************************************************************************/
+#define BAUD_RATE 19200
+
 void delay_ms(uint32_t time_ms) {
     neorv32_aux_delay_ms(neorv32_sysinfo_get_clk(), time_ms);
 }
 
-#define BAUD_RATE 19200
-
-/**********************************************************************/ /**
-                                                                          * Main function; shows an incrementing 16-bit counter on GPIO.output(7:0).
-                                                                          *
-                                                                          * @note This program requires the GPIO controller to be synthesized.
-                                                                          *
-                                                                          * @return Will never return.
-                                                                          **************************************************************************/
 int main() {
-    // clear GPIO output (set all bits to 0)
-    neorv32_gpio_port_set(0);
+    // Setup
     neorv32_rte_setup();
     neorv32_uart0_setup(BAUD_RATE, 0);
 
-    // Check if GPIO unit is implemented
+    // Check if GPIO is available
     if (neorv32_gpio_available() == 0) {
-        return 1;  // Error: No GPIO unit synthesized!
+        neorv32_uart0_printf("Error: No GPIO unit synthesized!\n");
+        return 1;
     }
+
+    neorv32_gpio_port_set(0);  // clear output
 
     while (1) {
-        neorv32_uart0_printf("input = %u,%u\n", neorv32_gpio_pin_get(16), neorv32_gpio_pin_get(17));
-        if (neorv32_gpio_pin_get(16)) {
-            neorv32_gpio_port_set(0x00F);  // increment counter and mask for 16 bit
-        } else if (neorv32_gpio_pin_get(17)) {
-            neorv32_gpio_port_set(0x0F0);
-        } else if (neorv32_gpio_pin_get(20)) {
-            neorv32_gpio_port_set(0xF00);
-        }
-
-        delay_ms(25);  // wait 25ms using busy wait
+        uint16_t all_keycodes = neorv32_gpio_keycodes_get();
+        neorv32_uart0_printf("keycode = %x\n",
+                             all_keycodes);
+        delay_ms(1000);
     }
 
-    // this should never be reached
     return 0;
 }
