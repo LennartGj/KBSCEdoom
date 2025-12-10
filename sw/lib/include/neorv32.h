@@ -244,6 +244,7 @@ typedef union {
 #include "neorv32_gpio.h"
 #include "neorv32_gptmr.h"
 #include "neorv32_intrinsics.h"
+#include "neorv32_keyb.h"
 #include "neorv32_legacy.h"
 #include "neorv32_neoled.h"
 #include "neorv32_onewire.h"

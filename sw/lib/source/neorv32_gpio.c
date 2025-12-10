@@ -57,25 +57,6 @@ uint32_t neorv32_gpio_pin_get(int pin) {
     return NEORV32_GPIO->PORT_IN & (uint32_t)(1 << pin);
 }
 
-/**
- * @brief Lees beide 8-bit keycodes van GPIO (keycode1 = LSB, keycode2 = MSB)
- *
- * @return 16-bit waarde: [15:8] = keycode2, [7:0] = keycode1
- */
-uint16_t neorv32_gpio_keycodes_get(void) {
-    return NEORV32_GPIO->PORT_IN & 0xFFFF;
-}
-
-/**
- * @brief Haal individuele keycodes uit de 16-bit waarde, kies 1 (meest recent) of 2 (vorige keycode)
- */
-uint8_t neorv32_gpio_keycode(uint16_t keycodes, int which) {
-    if (which == 1)
-        return keycodes & 0xFF;  // LSB
-    else
-        return (keycodes >> 8) & 0xFF;  // MSB
-}
-
 /**********************************************************************/ /**
                                                                           * Set complete GPIO output port.
                                                                           *

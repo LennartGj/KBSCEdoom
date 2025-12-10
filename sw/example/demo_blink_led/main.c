@@ -25,10 +25,31 @@ int main() {
     neorv32_gpio_port_set(0);  // clear output
 
     while (1) {
-        uint16_t all_keycodes = neorv32_gpio_keycodes_get();
-        neorv32_uart0_printf("keycode = %x\n",
-                             all_keycodes);
-        delay_ms(1000);
+        uint16_t raw = neorv32_keyb_getRaw();
+        uint8_t scan = raw & 0xFF;
+
+        uint8_t pressed;
+
+        // Als high byte 0xF0 is → released, pressed = 0
+        // Als high byte 0xE0 is → pressed, pressed = 1
+        // Anders → pressed = 1
+        uint8_t code_hi = (raw >> 8) & 0xFF;
+
+        if (code_hi == 0xF0) {
+            pressed = 0;  // released
+        } else {
+            pressed = 1;  // pressed
+        }
+
+        neorv32_uart0_printf("RAW = %x\n", raw);
+
+        // if (pressed) {
+        //     neorv32_uart0_printf("pressed = %x\n", scan);
+        // } else {
+        //     neorv32_uart0_printf("released = %x\n", scan);
+        // }
+
+        // delay_ms(1000);
     }
 
     return 0;

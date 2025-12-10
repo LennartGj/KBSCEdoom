@@ -56,8 +56,6 @@ uint32_t neorv32_gpio_pin_get(int pin);
 void neorv32_gpio_port_set(uint32_t pin_mask);
 void neorv32_gpio_port_toggle(uint32_t pin_mask);
 uint32_t neorv32_gpio_port_get(void);
-uint16_t neorv32_gpio_keycodes_get(void);
-uint8_t neorv32_gpio_keycode(uint16_t keycodes, int which);
 void neorv32_gpio_irq_setup(int pin, int trigger);
 void neorv32_gpio_irq_enable(uint32_t pin_mask);
 void neorv32_gpio_irq_disable(uint32_t pin_mask);

@@ -41,8 +41,10 @@ architecture rtl of neorv32_test_setup_bootloader is
   signal vga_green_int : std_logic_vector(3 downto 0);
   signal vga_blue_int  : std_logic_vector(3 downto 0);
 
+  -- keycode coming from PS2Receiver (matches Verilog: output reg [15:0] keycode)
   signal keycode_int : std_logic_vector(15 downto 0);
 
+  -- Component declarations
   component vga_controller is
     port (
       clk_i     : in  std_logic;
@@ -58,12 +60,13 @@ architecture rtl of neorv32_test_setup_bootloader is
     );
   end component;
 
+  -- PS2Receiver component: let op de port-naam "keycode"
   component PS2Receiver is
     port (
-      clk        : in  std_logic;
-      kclk       : in  std_logic;
-      kdata      : in  std_logic;
-      keycodeout : out std_logic_vector(15 downto 0)
+      clk     : in  std_logic;
+      kclk    : in  std_logic;
+      kdata   : in  std_logic;
+      keycode : out std_logic_vector(15 downto 0)
     );
   end component;
 
@@ -94,13 +97,19 @@ begin
       uart0_rxd_i => uart0_rxd_i
     );
 
-  -- stuur PS/2 keycodes naar GPIO-input van NEORV32
-  con_gpio_in(15 downto 0) <= std_ulogic_vector(keycode_int);
+  ----------------------------------------------------------------------------
+  -- PS/2 -> NEORV32 GPIO mapping
+  -- place the 16-bit PS/2 keycode onto the lower 16 bits of the NEORV32 gpio_i
+  ----------------------------------------------------------------------------
+  -- convert std_logic_vector to std_ulogic_vector for assignment
+  con_gpio_in(15 downto 0)  <= std_ulogic_vector(keycode_int);
+  -- drive upper bits deterministically (unused)
+  con_gpio_in(31 downto 16) <= (others => '0');
 
-  -- stuur GPIO-output naar fysieke leds
+  -- stuur GPIO-output naar fysieke leds / top-level gpio_o port
   gpio_o <= con_gpio_out(15 downto 0);
 
-  -- VGA mapping
+  -- VGA mapping (gebruik lage 12 bits van GPIO-out zoals voorheen)
   vga_red_int   <= std_logic_vector(con_gpio_out(3 downto 0));
   vga_green_int <= std_logic_vector(con_gpio_out(7 downto 4));
   vga_blue_int  <= std_logic_vector(con_gpio_out(11 downto 8));
@@ -118,14 +127,14 @@ begin
       vga_g_o   => vga_g_o,
       vga_b_o   => vga_b_o
     );
-  -- Deze staat los in de git voeg hem handmatig toe!!! samen met de debouncer!!
-  -- PS/2 receiver
+
+  -- PS/2 receiver instance (let op: port name 'keycode' matches Verilog output)
   inst_ps2: PS2Receiver
     port map (
-      clk        => clk_i,
-      kclk       => ps2_clk,
-      kdata      => ps2_data,
-      keycodeout => keycode_int
+      clk     => clk_i,
+      kclk    => ps2_clk,
+      kdata   => ps2_data,
+      keycode => keycode_int
     );
 
 end architecture;
